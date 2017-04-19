@@ -1,0 +1,34 @@
+images {
+  image: "/assets/background.png"
+}
+images {
+  image: "/assets/bottom.png"
+}
+images {
+  image: "/assets/grass.png"
+}
+images {
+  image: "/assets/top.png"
+}
+images {
+  image: "/assets/border.png"
+}
+animations {
+  id: "bird"
+  images {
+    image: "/assets/bird.png"
+  }
+  images {
+    image: "/assets/bird2.png"
+  }
+  images {
+    image: "/assets/bird3.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 10
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+margin: 0
+extrude_borders: 2
+inner_padding: 0

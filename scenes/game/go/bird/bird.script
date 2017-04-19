@@ -1,0 +1,58 @@
+local screen_helper = require ("lib.screen_helper")
+local position = vmath.vector3(screen_helper.game_width/2,screen_helper.game_height/2,0)
+local velocity = vmath.vector3()
+local acceleration = vmath.vector3(0,-460,0)
+
+local hash_touch = hash("touch")
+local rotation = 0
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+local function  is_falling()
+    return velocity.y < -110;
+end
+
+local function shouldn_flap()
+    return velocity.y > -70;
+end
+
+local function rotate(dt)
+	-- повернуть против часовой стрелки
+    if (velocity.y > 0) then
+    	rotation = rotation - 600 * dt
+        if (rotation < -20) then rotation = -20 end
+	end
+
+	--Повернуть по часовой стрелке
+	if (is_falling())then
+		rotation = rotation +  480 * dt
+    	if (rotation > 90)then rotation = 90 end
+    end
+    go.set(".","euler.z",-rotation)
+end	
+
+function update(self, dt)
+	velocity = velocity + acceleration * dt
+    if (velocity.y < -200) then velocity.y = -200 end
+    position = position + velocity * dt 
+    go.set_position(position)
+    rotate(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	if(action_id == hash_touch) then
+		  velocity.y = 140
+	end	
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

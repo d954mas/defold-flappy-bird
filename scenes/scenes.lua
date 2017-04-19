@@ -1,4 +1,3 @@
-local cards = require("models.cards")
 local M = {}
 
 local prefix="main:/scenes"
@@ -9,9 +8,7 @@ end
 
 
 M.menu = create_url("#menu")
-M.cards = create_url("#cards")
-M.fight = create_url("#fight")
-M.change_card = create_url("#change_card")
-M.default_scene_name = "menu"
+M.game = create_url("#game")
+M.default_scene_name = "game"
 
 return M
