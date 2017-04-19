@@ -3,18 +3,24 @@ title = My project
 version = 0.1
 
 [bootstrap]
-main_collection = /main/main.collectionc
+main_collection = /main.collectionc
+render = /render/my.renderc
 
 [input]
-game_binding = /input/game.input_bindingc
+game_binding = /game.input_bindingc
 
 [display]
-width = 1280
-height = 720
+width = 640
+height = 960
+high_dpi = 1
 
 [physics]
 scale = 0.02
+debug = 1
 
 [script]
 shared_state = 1
+
+[library]
+include_dirs = https://github.com/d954mas/stageUI/archive/master.zip,  https://github.com/britzl/defold-googleanalytics/archive/master.zip https://github.com/britzl/defcon/archive/master.zip  https://github.com/britzl/defnet/archive/2.1.zip,https://github.com/d954mas/router/archive/master.zip
 
