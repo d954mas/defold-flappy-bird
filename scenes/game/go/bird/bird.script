@@ -47,7 +47,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	if(action_id == hash_touch) then
+	if(action_id == hash_touch and action.pressed) then
 		  velocity.y = 140
 	end	
 end

@@ -9,21 +9,23 @@ local delay_x = 10
 local speed = 10
 go.property("id",1)
 
+local function update_sprites(self)
+	 go.set("/pipe".. self.id .."/top", "position.y", height)
+	 bot_scale.y = (height - top_height)/bot_height
+	 go.set_scale(bot_scale,"/pipe".. self.id .."/bottom")
+end 
+
 local function new_animation(self)
 	local prev_id = 1
 	if(self.id == 1) then prev_id = 3
 	elseif(self.id == 2) then prev_id = 1
 	elseif(self.id == 3) then prev_id = 2
 	end
-	print( go.get("/pipe".. 1 .. "/controller", "position.y"))
-	print( go.get("/pipe".. 2 .. "/controller", "position.y"))
-	print( go.get("/pipe".. 3 .. "/controller", "position.y"))
-	print( go.get("/pipe".. 4 .. "/controller", "position.y"))
-	print(prev_pipe_x)
-	self.start_x = prev_pipe_x + pipe_gap
-	--print(self.start_x)
+	self.start_x = go.get("/pipe".. prev_id .. "/controller", "position.x") + pipe_gap
 	go.set(".","position.x",self.start_x)
 	local path = self.start_x - end_x
+	height = math.random(15,90)
+	update_sprites(self)
 	go.animate(".","position.x",go.PLAYBACK_ONCE_FORWARD,end_x,go.EASING_LINEAR,path/speed,0,new_animation)
 end	
 
@@ -33,13 +35,6 @@ local function animate(self)
 	local path = self.start_x - end_x
 	go.animate(".","position.x",go.PLAYBACK_ONCE_FORWARD,end_x,go.EASING_LINEAR,path/speed,0,new_animation)
 end
-
-
-local function update_sprites(self)
-	 go.set("/pipe".. self.id .."/top", "position.y", height)
-	 bot_scale.y = (height - top_height)/bot_height
-	 go.set_scale(bot_scale,"/pipe".. self.id .."/bottom")
-end	
 
 function init(self)
 	self.start_x = delay_x + pipe_gap * self.id
