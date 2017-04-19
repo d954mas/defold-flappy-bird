@@ -13,6 +13,9 @@ images {
 images {
   image: "/assets/border.png"
 }
+images {
+  image: "/assets/dirt.png"
+}
 animations {
   id: "bird"
   images {

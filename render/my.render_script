@@ -1,5 +1,5 @@
+math.randomseed(os.time())
 local screen_helper = require("lib.screen_helper")
-local draw_color = require ("lib.draw_color.draw_color")
 local constants = require("lib.constants")
 
 function init(self)
@@ -7,12 +7,10 @@ function init(self)
     self.gui_pred = render.predicate({"gui"})
     self.text_pred = render.predicate({"text"})
     self.particle_pred = render.predicate({"particle"})
-    
     self.clear_color = constants.sky_color
 
     self.view = vmath.matrix4()
     screen_helper.calculate(render.get_window_width(),render.get_window_height())
-    draw_color.init()
 end
 
 
@@ -20,8 +18,6 @@ function update(self)
     render.set_depth_mask(true)
     render.set_stencil_mask(0xff)
     render.clear({[render.BUFFER_COLOR_BIT] = self.clear_color, [render.BUFFER_DEPTH_BIT] = 1, [render.BUFFER_STENCIL_BIT] = 0})
-    draw_color.draw(0,0,render.get_window_width(),screen_helper.dirt_pos_y,constants.dirt_color)
-	
 	
     render.set_viewport(0, 0, render.get_window_width(), render.get_window_height())
     render.set_view(self.view)
