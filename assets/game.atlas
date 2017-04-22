@@ -16,8 +16,11 @@ images {
 images {
   image: "/assets/dirt.png"
 }
+images {
+  image: "/assets/bird.png"
+}
 animations {
-  id: "bird"
+  id: "fly"
   images {
     image: "/assets/bird.png"
   }

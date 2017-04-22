@@ -39,88 +39,6 @@ instances {
     z: 1.0
   }
 }
-collection_instances {
-  id: "pipe1"
-  collection: "/scenes/game/go/pipe/pipe.collection"
-  position {
-    x: 115.081
-    y: 46.313
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "pipe2"
-  collection: "/scenes/game/go/pipe/pipe.collection"
-  position {
-    x: 186.517
-    y: 46.313
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  instance_properties {
-    id: "controller"
-    properties {
-      id: "script"
-      properties {
-        id: "id"
-        value: "2.0"
-        type: PROPERTY_TYPE_NUMBER
-      }
-    }
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "pipe3"
-  collection: "/scenes/game/go/pipe/pipe.collection"
-  position {
-    x: 186.517
-    y: 46.313
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  instance_properties {
-    id: "controller"
-    properties {
-      id: "script"
-      properties {
-        id: "id"
-        value: "3.0"
-        type: PROPERTY_TYPE_NUMBER
-      }
-    }
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
 scale_along_z: 0
 embedded_instances {
   id: "go"
@@ -146,7 +64,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
+    x: -0.185
     y: 0.0
     z: 0.0
   }
@@ -186,7 +104,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
+    x: -0.185
     y: 68.0
     z: 0.1
   }
@@ -239,6 +157,58 @@ embedded_instances {
   scale3 {
     x: 136.0
     y: 100.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "pipe_factory"
+  data: "components {\n"
+  "  id: \"script\"\n"
+  "  component: \"/scenes/game/go/pipe/factory.script\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"factory\"\n"
+  "  type: \"collectionfactory\"\n"
+  "  data: \"prototype: \\\"/scenes/game/go/pipe/pipes.collection\\\"\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
     z: 1.0
   }
 }

@@ -1,14 +1,14 @@
-local start_x = 0
-local end_x = 0
+local constants = require("lib.constants")
 
-local function animate()
-	go.set(".","position.x",start_x)
-	go.animate(".","position.x",go.PLAYBACK_ONCE_FORWARD,end_x,go.EASING_LINEAR,10,0,animate)
+local function animate(self)
+	go.set(".","position.x",self.start_x)
+	go.animate(".","position.x",go.PLAYBACK_ONCE_FORWARD,self.end_x,go.EASING_LINEAR,self.time,0,animate)
 end
 
 function init(self)
-	start_x = go.get_position().x
+	self.start_x = go.get_position().x
 	local width = -165
-	end_x = start_x + width
-	animate()
+	self.end_x = self.start_x + width
+	self.time = (self.start_x - self.end_x)/constants.pipes_speed
+	animate(self)
 end

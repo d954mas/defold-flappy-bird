@@ -16,7 +16,7 @@ height = 480
 high_dpi = 1
 
 [physics]
-scale = 0.02
+scale = 0.2
 debug = 1
 
 [script]
