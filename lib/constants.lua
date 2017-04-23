@@ -9,7 +9,7 @@ M.game_zone_height = 204
 M.bird_position = vmath.vector3(33,M.game_zone_height/2,0.3)
 
 --all info about pipes
-M.pipes_speed = 10 -- pixels/s speed of pipes and grass
+M.pipes_speed = 20 -- pixels/s speed of pipes and grass
 M.pipe_top_size = vmath.vector3(24,14,0)
 M.pipe_start_pos = vmath.vector3(100,47,0.5)
 M.pipes_gap = 50

@@ -56,3 +56,12 @@ function init(self)
 		start_animation(self,i)
 	end
 end
+
+function on_message(self,message_id,message)
+	print(message_id)
+	if(message_id == hash("stop")) then
+		for i,pipe in ipairs(self.pipes) do
+			go.cancel_animations(pipe[pipe_root],"position.x")
+		end	
+	end	
+end

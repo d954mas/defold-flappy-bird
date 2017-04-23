@@ -12,3 +12,9 @@ function init(self)
 	self.time = (self.start_x - self.end_x)/constants.pipes_speed
 	animate(self)
 end
+
+function on_message(self,message_id,message)
+	if(message_id == hash("stop")) then
+		go.cancel_animations(".","position.x")
+	end	
+end

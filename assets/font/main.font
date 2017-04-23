@@ -1,0 +1,8 @@
+font: "/assets/font/04b__19.ttf"
+material: "/builtins/fonts/font.material"
+size: 32
+outline_alpha: 0.0
+shadow_alpha: 0.0
+shadow_blur: 0
+shadow_x: 0.0
+shadow_y: 0.0
