@@ -19,6 +19,12 @@ images {
 images {
   image: "/assets/bird.png"
 }
+images {
+  image: "/assets/get_ready.png"
+}
+images {
+  image: "/assets/tap.png"
+}
 animations {
   id: "fly"
   images {

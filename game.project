@@ -11,13 +11,13 @@ render = /render/my.renderc
 game_binding = /game.input_bindingc
 
 [display]
-width = 320
-height = 480
-high_dpi = 1
+width = 480
+height = 720
+high_dpi = 0
 
 [physics]
 scale = 0.2
-debug = 1
+debug = 0
 
 [script]
 shared_state = 1

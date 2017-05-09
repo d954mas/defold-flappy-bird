@@ -23,7 +23,7 @@ local function  is_falling()
 end
 
 local function should_flap()
-    return velocity.y > -70;
+    return velocity.y > -70 and alive
 end
 
 local function rotate(dt)
@@ -44,7 +44,7 @@ function update(self, dt)
     if (velocity.y < -200) then velocity.y = -200 end
     position = position + velocity * dt 
     go.set_position(position)
-   rotate(dt)
+    rotate(dt)
     if(flapping ~= should_flap())then
     	flapping = should_flap()
     	update_animation()

@@ -6,6 +6,7 @@ end
 
 local function start_game(self,state)
 	self.state = 1
+	msg.post("idle_gui","disable")
 	msg.post("pipe_factory","start")
 	msg.post("bird","start_game")
 	msg.post("game_gui","set_score",{score = self.score})
@@ -22,6 +23,7 @@ local function reset(self)
 	msg.post("bird","reset")
 	msg.post("pipe_factory","reset")
 	msg.post("grass","start")
+	msg.post("idle_gui","enable")
 end	
 
 function on_message(self, message_id, message, sender)

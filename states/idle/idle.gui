@@ -1,7 +1,7 @@
-script: "/states/game/game_gui.gui_script"
-fonts {
-  name: "main"
-  font: "/assets/font/main.font"
+script: ""
+textures {
+  name: "game"
+  texture: "/assets/game.atlas"
 }
 background_color {
   x: 0.0
@@ -12,7 +12,7 @@ background_color {
 nodes {
   position {
     x: 240.0
-    y: 600.0
+    y: 440.0
     z: 0.0
     w: 1.0
   }
@@ -23,14 +23,14 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 2.0
-    y: 2.0
+    x: 1.3
+    y: 1.3
     z: 1.0
     w: 1.0
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 184.0
+    y: 50.0
     z: 0.0
     w: 1.0
   }
@@ -40,18 +40,33 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_TEMPLATE
-  id: "score_label"
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "game/get_ready"
+  id: "box"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
   layer: ""
   inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
   alpha: 1.0
-  template: "/stageUI/elements/label/label.gui"
   template_node_child: false
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
+    x: 240.0
+    y: 310.0
     z: 0.0
     w: 1.0
   }
@@ -62,14 +77,14 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 1.0
-    y: 1.0
+    x: 1.3
+    y: 1.3
     z: 1.0
     w: 1.0
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 113.0
+    y: 98.0
     z: 0.0
     w: 1.0
   }
@@ -79,39 +94,28 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_TEXT
+  type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  text: "0"
-  font: "main"
-  id: "score_label/root"
-  xanchor: XANCHOR_RIGHT
+  texture: "game/tap"
+  id: "box1"
+  xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
-  outline {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  shadow {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
   adjust_mode: ADJUST_MODE_FIT
-  line_break: false
-  parent: "score_label"
   layer: ""
   inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
   alpha: 1.0
-  outline_alpha: 1.0
-  shadow_alpha: 1.0
-  overridden_fields: 8
-  overridden_fields: 10
-  template_node_child: true
-  text_leading: 1.0
-  text_tracking: 0.0
+  template_node_child: false
+  size_mode: SIZE_MODE_AUTO
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_LEGACY
