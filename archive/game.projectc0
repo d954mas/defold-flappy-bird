@@ -1,0 +1,31 @@
+[project]
+title = Flappy Bird
+version = 0.1
+dependencies = 
+
+[bootstrap]
+main_collection = /main.collectionc
+render = /render/my.renderc
+
+[input]
+game_binding = /game.input_bindingc
+
+[display]
+width = 480
+height = 720
+high_dpi = 1
+
+[physics]
+scale = 0.2
+debug = 0
+
+[script]
+shared_state = 1
+
+[library]
+include_dirs = https://github.com/d954mas/stageUI/archive/master.zip,  https://github.com/britzl/defold-googleanalytics/archive/master.zip https://github.com/britzl/defcon/archive/master.zip  https://github.com/britzl/defnet/archive/2.1.zip,https://github.com/d954mas/router/archive/master.zip
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
+
