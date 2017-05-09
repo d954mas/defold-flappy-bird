@@ -47,21 +47,62 @@ local function init_pipe(pipe,id)
 	change_height(pipe)
 end
 
-function init(self)
-	self.pipes = {}
+local function create_pipes(self)
 	for i = 1,  self.pipes_size do
 		local pipe = collectionfactory.create("#factory", nil, nil, {}, nil)
-		init_pipe(pipe,i)
 		self.pipes[i] = pipe
-		start_animation(self,i)
 	end
 end
 
+local function init_pipes(self)
+	for i,pipe in ipairs(self.pipes) do
+		init_pipe(pipe,i)
+	end	
+end
+
+local function pipes_animation(self)
+	for i,pipe in ipairs(self.pipes) do
+		start_animation(self,i)
+	end	
+end	
+
+local function disable_pipes(self)
+	for i,pipe in ipairs(self.pipes) do
+		msg.post(pipe[pipe_root],"disable")
+		msg.post(pipe[top_pipe_top],"disable")
+		msg.post(pipe[top_pipe_bottom],"disable")
+		msg.post(pipe[bottom_pipe_top],"disable")	
+		msg.post(pipe[bottom_pipe_bottom],"disable")
+	end
+end	
+
+local function enable_pipes(self)
+	for i,pipe in ipairs(self.pipes) do
+		msg.post(pipe[pipe_root],"enable")
+		msg.post(pipe[top_pipe_top],"enable")
+		msg.post(pipe[top_pipe_bottom],"enable")
+		msg.post(pipe[bottom_pipe_top],"enable")	
+		msg.post(pipe[bottom_pipe_bottom],"enable")
+	end
+end
+
+
+function init(self)
+	self.pipes = {}
+	create_pipes(self)
+	disable_pipes(self)
+end
+
 function on_message(self,message_id,message)
-	print(message_id)
 	if(message_id == hash("stop")) then
 		for i,pipe in ipairs(self.pipes) do
 			go.cancel_animations(pipe[pipe_root],"position.x")
 		end	
+	elseif(message_id == hash("start")) then
+		init_pipes(self)
+		pipes_animation(self)
+		enable_pipes(self)
+	elseif(message_id == hash("reset")) then
+		disable_pipes(self)
 	end	
 end

@@ -16,5 +16,7 @@ end
 function on_message(self,message_id,message)
 	if(message_id == hash("stop")) then
 		go.cancel_animations(".","position.x")
+	elseif(message_id == hash("start")) then
+		animate(self)
 	end	
 end

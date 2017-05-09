@@ -1,7 +1,7 @@
 name: "pipe"
 collection_instances {
   id: "pipe_bottom"
-  collection: "/scenes/game/go/pipe/pipe.collection"
+  collection: "/states/go/pipe/pipe.collection"
   position {
     x: 0.0
     y: 0.0
@@ -21,7 +21,7 @@ collection_instances {
 }
 collection_instances {
   id: "pipe_top"
-  collection: "/scenes/game/go/pipe/pipe.collection"
+  collection: "/states/go/pipe/pipe.collection"
   position {
     x: 0.0
     y: 0.0

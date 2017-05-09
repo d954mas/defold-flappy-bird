@@ -1,0 +1,16 @@
+local stage_ui=require("stageUI.stage_ui")
+local styles=require("stageUI.styles")
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.stage=stage_ui.Stage.new(styles)
+	self.score_lbl=stage_ui.Label:new("score_label","no_style")
+	self.stage:add(self.score_lbl)
+end
+
+function on_message(self, message_id, message, sender)
+	if(message_id == hash("set_score")) then
+		self.score_lbl:set_text(message.score)
+	end	
+end
+

@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/scenes/game/go/grass/grass.script"
+  component: "/states/go/grass/grass.script"
   position {
     x: 0.0
     y: 0.0
