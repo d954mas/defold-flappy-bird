@@ -1,4 +1,6 @@
 local constants = require("lib.constants")
+local hash_start = hash("start")
+local hash_stop = hash("stop")
 
 local function animate(self)
 	go.set(".","position.x",self.start_x)
@@ -14,9 +16,9 @@ function init(self)
 end
 
 function on_message(self,message_id,message)
-	if(message_id == hash("stop")) then
+	if(message_id == hash_stop) then
 		go.cancel_animations(".","position.x")
-	elseif(message_id == hash("start")) then
+	elseif(message_id == hash_start) then
 		animate(self)
 	end	
 end

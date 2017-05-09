@@ -6,4 +6,5 @@ shadow_alpha: 0.0
 shadow_blur: 0
 shadow_x: 0.0
 shadow_y: 0.0
+extra_characters: ""
 output_format: TYPE_DISTANCE_FIELD

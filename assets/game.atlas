@@ -1,40 +1,46 @@
 images {
-  image: "/assets/background.png"
+  image: "/assets/img/background.png"
 }
 images {
-  image: "/assets/bottom.png"
+  image: "/assets/img/bottom.png"
 }
 images {
-  image: "/assets/grass.png"
+  image: "/assets/img/grass.png"
 }
 images {
-  image: "/assets/top.png"
+  image: "/assets/img/top.png"
 }
 images {
-  image: "/assets/border.png"
+  image: "/assets/img/border.png"
 }
 images {
-  image: "/assets/dirt.png"
+  image: "/assets/img/dirt.png"
 }
 images {
-  image: "/assets/bird.png"
+  image: "/assets/img/bird.png"
 }
 images {
-  image: "/assets/get_ready.png"
+  image: "/assets/img/get_ready.png"
 }
 images {
-  image: "/assets/tap.png"
+  image: "/assets/img/tap.png"
+}
+images {
+  image: "/assets/img/scores.png"
+}
+images {
+  image: "/assets/img/game_over.png"
 }
 animations {
   id: "fly"
   images {
-    image: "/assets/bird.png"
+    image: "/assets/img/bird.png"
   }
   images {
-    image: "/assets/bird2.png"
+    image: "/assets/img/bird2.png"
   }
   images {
-    image: "/assets/bird3.png"
+    image: "/assets/img/bird3.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 10

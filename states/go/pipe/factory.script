@@ -1,5 +1,9 @@
 local constants = require("lib.constants")
 
+local hash_stop = hash("stop")
+local hash_start = hash("start")
+local hash_reset = hash("reset")
+
 local top_pipe_top = hash("/pipe_top/top")
 local top_pipe_bottom = hash("/pipe_top/bottom")
 local bottom_pipe_top = hash("/pipe_bottom/top")
@@ -94,15 +98,15 @@ function init(self)
 end
 
 function on_message(self,message_id,message)
-	if(message_id == hash("stop")) then
+	if(message_id == hash_stop) then
 		for i,pipe in ipairs(self.pipes) do
 			go.cancel_animations(pipe[pipe_root],"position.x")
 		end	
-	elseif(message_id == hash("start")) then
+	elseif(message_id == hash_start) then
 		init_pipes(self)
 		pipes_animation(self)
 		enable_pipes(self)
-	elseif(message_id == hash("reset")) then
+	elseif(message_id == hash_reset) then
 		disable_pipes(self)
 	end	
 end

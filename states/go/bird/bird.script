@@ -2,6 +2,15 @@ local constants = require("lib.constants")
 local screen_helper = require ("lib.screen_helper")
 local lume = require ("lib.lume")
 
+local hash_collision_response=hash("collision_response")
+local hash_score = hash("score")
+local hash_fly = hash("fly")
+local hash_bird = hash("bird")
+local hash_trigger_response=hash("trigger_response")
+local hash_dirt = hash("dirt")
+local hash_start_game = hash("start_game")
+local hash_reset = hash("reset")
+
 local position = vmath.vector3(constants.bird_position)
 local velocity = vmath.vector3()
 local acceleration = vmath.vector3(0,-460,0)
@@ -14,7 +23,7 @@ local state = 0 -- 0 - idle, 1 - game
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("#sprite", "play_animation", {id = hash("fly")})
+	msg.post("#sprite", "play_animation", {id = hash_fly})
 	go.set_position(position)
 end
 
@@ -34,7 +43,7 @@ local function rotate(dt)
 end
 
 local function update_animation()
-	local name = flapping and hash("fly") or hash("bird")
+	local name = flapping and hash_fly or hash_bird
 	msg.post("#sprite", "play_animation", {id = name})
 end	
 
@@ -66,14 +75,14 @@ local function reset(self)
 	alive = true
 	state = 0 -- 0 - idle, 1 - game
 	acceleration.y = -460
-	msg.post("#sprite", "play_animation", {id = hash("fly")})
+	msg.post("#sprite", "play_animation", {id = hash_fly})
 	go.set_position(position)
 	go.set(".","euler.z",-rotation)
 end	
 
 
 function on_message(self,message_id,message,sender)
-	if(message_id == hash("collision_response") and message.group ~= hash("score")) then
+	if(message_id == hash_collision_response and message.group ~= hash_score) then
 		if(alive == true) then	
 			alive = false
 			msg.post("/sounds#dead","play_sound")
@@ -81,15 +90,16 @@ function on_message(self,message_id,message,sender)
 			msg.post("/pipe_factory#script","stop")
 			msg.post("controller","game_over")
 		end
-		if(message.group == hash("dirt")) then
+		if(message.group == hash_dirt) then
 			acceleration.y = 0
 			velocity.y = 0
 		end	
-	elseif(message_id == hash("trigger_response") and message.enter) then
+	elseif(message_id == hash_trigger_response and message.enter) then
+		msg.post("/sounds#coin","play_sound")
 		msg.post("controller","increase_score")
-	elseif(message_id == hash("start_game")) then
+	elseif(message_id == hash_start_game) then
 		state = 1
-	elseif(message_id == hash("reset")) then
+	elseif(message_id == hash_reset) then
 		reset(self)
 	end
 end

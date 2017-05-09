@@ -1,7 +1,18 @@
+--[[
+Game have 3 states:idle(tap to start play),game,and gameover
+changing state is happened here
+--]]
+
+local hash_increase_score=hash("increase_score")
+local hash_game_over=hash("game_over")
+local hash_increase_score=hash("increase_score")
+local hash_restart=hash("restart")
+local hash_touch = hash("touch")
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	self.score = 0
 	self.state = 0 -- 0-ready ,1-game, 2-game_over
+	msg.post("game_over_gui","disable")
 end
 
 local function start_game(self,state)
@@ -10,6 +21,7 @@ local function start_game(self,state)
 	msg.post("pipe_factory","start")
 	msg.post("bird","start_game")
 	msg.post("game_gui","set_score",{score = self.score})
+	
 end
 
 local function increase_score(self)
@@ -24,21 +36,26 @@ local function reset(self)
 	msg.post("pipe_factory","reset")
 	msg.post("grass","start")
 	msg.post("idle_gui","enable")
+	msg.post("game_over_gui","disable")
+	msg.post("game_gui","enable")
+	msg.post("game_gui","set_score",{score = self.score})
 end	
 
 function on_message(self, message_id, message, sender)
-	if(message_id == hash("increase_score")) then increase_score(self)
-	elseif(message_id == hash("game_over")) then
+	if(message_id == hash_increase_score) then increase_score(self)
+	elseif(message_id == hash_game_over) then
 		self.state = 2
+		msg.post("game_gui","disable")
+		msg.post("game_over_gui","enable")
+		msg.post("game_over_gui","show",{score = self.score})
+	elseif(message_id == hash_restart)then
+		reset(self)
 	end	
-	
 end
 
 function on_input(self, action_id, action)
-	if(self.state == 0 and action_id == hash("touch") and action.pressed) then
+	if(self.state == 0 and action_id == hash_touch and action.pressed) then
 		start_game(self)
-	elseif(self.state == 2 and action_id == hash("touch")and action.pressed)then
-		reset(self)
 	end	
 end
 

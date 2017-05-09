@@ -9,7 +9,10 @@ M.game_delta_x = 0
 M.height_delta = 0
 M.game_projection = nil
 
-
+--if screen ration is bigger then 3/2 show more dirt and sky
+--if ration in 4/3 to 3/2 zoom to center.Player will see all game zone in width 
+--and part of game zone in height
+--if ratio <4/3 add offset at x
 function M.calculate(screen_width,screen_height)
 	local height_to_width = screen_height/screen_width
 	M.game_height = M.game_width * height_to_width

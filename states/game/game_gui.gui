@@ -40,50 +40,11 @@ nodes {
     z: 1.0
     w: 1.0
   }
-  type: TYPE_TEMPLATE
-  id: "score_label"
-  layer: ""
-  inherit_alpha: true
-  alpha: 1.0
-  template: "/stageUI/elements/label/label.gui"
-  template_node_child: false
-}
-nodes {
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
-  }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "0"
   font: "main"
-  id: "score_label/root"
+  id: "score_label"
   xanchor: XANCHOR_RIGHT
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -101,15 +62,12 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: false
-  parent: "score_label"
   layer: ""
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
   shadow_alpha: 1.0
-  overridden_fields: 8
-  overridden_fields: 10
-  template_node_child: true
+  template_node_child: false
   text_leading: 1.0
   text_tracking: 0.0
 }
