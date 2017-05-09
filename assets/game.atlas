@@ -11,9 +11,6 @@ images {
   image: "/assets/img/top.png"
 }
 images {
-  image: "/assets/img/border.png"
-}
-images {
   image: "/assets/img/dirt.png"
 }
 images {
