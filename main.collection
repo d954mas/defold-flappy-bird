@@ -345,7 +345,7 @@ embedded_instances {
   "  data: \"sound: \\\"/assets/sounds/coin.ogg\\\"\\n"
   "looping: 0\\n"
   "group: \\\"master\\\"\\n"
-  "gain: 1.0\\n"
+  "gain: 0.4\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
