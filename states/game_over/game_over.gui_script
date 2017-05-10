@@ -20,7 +20,7 @@ function init(self)
 	
 	--prepare for animation
 	score_container_start_pos=vmath.vector3(self.score_container_pos)
-	score_container_start_pos.y = -100
+	score_container_start_pos.y = -150
 	game_over_end_pos=gui.get_position(self.game_over)
 	game_over_end_pos.y = game_over_end_pos.y + 20
 end
