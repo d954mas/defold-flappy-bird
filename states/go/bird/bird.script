@@ -14,6 +14,7 @@ local hash_reset = hash("reset")
 local position = vmath.vector3(constants.bird_position)
 local velocity = vmath.vector3()
 local acceleration = vmath.vector3(0,-460,0)
+local easing = vmath.vector({-1,1})
 
 local hash_touch = hash("touch")
 local rotation = 0
@@ -21,10 +22,15 @@ local flapping = true
 local alive = true
 local state = 0 -- 0 - idle, 1 - game
 
+local function idle_animation(self)
+	go.animate(".","position.y",go.PLAYBACK_LOOP_PINGPONG,constants.bird_position.y+1.75,easing,0.75)	
+end	
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	msg.post("#sprite", "play_animation", {id = hash_fly})
 	go.set_position(position)
+	idle_animation(self)
 end
 
 local function  is_falling()
@@ -78,6 +84,7 @@ local function reset(self)
 	msg.post("#sprite", "play_animation", {id = hash_fly})
 	go.set_position(position)
 	go.set(".","euler.z",-rotation)
+	idle_animation(self)
 end	
 
 
@@ -99,6 +106,7 @@ function on_message(self,message_id,message,sender)
 		msg.post("controller","increase_score")
 	elseif(message_id == hash_start_game) then
 		state = 1
+		go.cancel_animations(".","position.y")
 	elseif(message_id == hash_reset) then
 		reset(self)
 	end
