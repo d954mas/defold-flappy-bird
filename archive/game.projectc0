@@ -1,6 +1,6 @@
 [project]
-title = Flappy Bird
-version = 0.1
+title = Flappy Zombie
+version = 0.2
 dependencies = 
 
 [bootstrap]
@@ -28,4 +28,13 @@ include_dirs = https://github.com/d954mas/stageUI/archive/master.zip,  https://g
 [graphics]
 default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
+
+[android]
+app_icon_48x48 = /assets/android/mipmap-mdpi/ic_launcher.png
+app_icon_72x72 = /assets/android/mipmap-hdpi/ic_launcher.png
+app_icon_96x96 = /assets/android/mipmap-xhdpi/ic_launcher.png
+app_icon_144x144 = /assets/android/mipmap-xxhdpi/ic_launcher.png
+app_icon_192x192 = /assets/android/mipmap-xxxhdpi/ic_launcher.png
+package = com.d954mas.flappybird
+version_code = 2
 
