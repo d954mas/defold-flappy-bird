@@ -1,8 +1,6 @@
 local constants = require("lib.constants")
+local hashes = require("lib.hashes")
 
-local hash_stop = hash("stop")
-local hash_start = hash("start")
-local hash_reset = hash("reset")
 
 local top_pipe_top = hash("/pipe_top/top")
 local top_pipe_bottom = hash("/pipe_top/bottom")
@@ -72,21 +70,21 @@ end
 
 local function disable_pipes(self)
 	for i,pipe in ipairs(self.pipes) do
-		msg.post(pipe[pipe_root],"disable")
-		msg.post(pipe[top_pipe_top],"disable")
-		msg.post(pipe[top_pipe_bottom],"disable")
-		msg.post(pipe[bottom_pipe_top],"disable")	
-		msg.post(pipe[bottom_pipe_bottom],"disable")
+		msg.post(pipe[pipe_root],hashes.MESSAGE_DISABLE)
+		msg.post(pipe[top_pipe_top],hashes.MESSAGE_DISABLE)
+		msg.post(pipe[top_pipe_bottom],hashes.MESSAGE_DISABLE)
+		msg.post(pipe[bottom_pipe_top],hashes.MESSAGE_DISABLE)	
+		msg.post(pipe[bottom_pipe_bottom],hashes.MESSAGE_DISABLE)
 	end
 end	
 
 local function enable_pipes(self)
 	for i,pipe in ipairs(self.pipes) do
-		msg.post(pipe[pipe_root],"enable")
-		msg.post(pipe[top_pipe_top],"enable")
-		msg.post(pipe[top_pipe_bottom],"enable")
-		msg.post(pipe[bottom_pipe_top],"enable")	
-		msg.post(pipe[bottom_pipe_bottom],"enable")
+		msg.post(pipe[pipe_root],hashes.MESSAGE_ENABLE)
+		msg.post(pipe[top_pipe_top],hashes.MESSAGE_ENABLE)
+		msg.post(pipe[top_pipe_bottom],hashes.MESSAGE_ENABLE)
+		msg.post(pipe[bottom_pipe_top],hashes.MESSAGE_ENABLE)	
+		msg.post(pipe[bottom_pipe_bottom],hashes.MESSAGE_ENABLE)
 	end
 end
 
@@ -98,15 +96,15 @@ function init(self)
 end
 
 function on_message(self,message_id,message)
-	if(message_id == hash_stop) then
+	if(message_id == hashes.MESSAGE_STOP) then
 		for i,pipe in ipairs(self.pipes) do
 			go.cancel_animations(pipe[pipe_root],"position.x")
 		end	
-	elseif(message_id == hash_start) then
+	elseif(message_id == hashes.MESSAGE_START) then
 		init_pipes(self)
 		pipes_animation(self)
 		enable_pipes(self)
-	elseif(message_id == hash_reset) then
+	elseif(message_id == hashes.MESSAGE_RESET) then
 		disable_pipes(self)
 	end	
 end

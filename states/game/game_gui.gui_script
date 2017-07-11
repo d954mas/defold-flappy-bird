@@ -1,11 +1,11 @@
-local hash_set_score = hash("set_score")
+local hashes = require("lib.hashes")
 
 function init(self)
 	self.score_lbl=gui.get_node("score_label")
 end
 
 function on_message(self, message_id, message, sender)
-	if(message_id == hash_set_score) then
+	if(message_id == hashes.MESSAGE_SET_SCORE) then
 		gui.set_text(self.score_lbl,message.score)
 	end	
 end

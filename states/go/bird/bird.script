@@ -1,22 +1,14 @@
 local constants = require("lib.constants")
 local screen_helper = require ("lib.screen_helper")
 local lume = require ("lib.lume")
+local hashes = require("lib.hashes")
 
-local hash_collision_response=hash("collision_response")
-local hash_score = hash("score")
-local hash_fly = hash("fly")
-local hash_bird = hash("bird")
-local hash_trigger_response=hash("trigger_response")
-local hash_dirt = hash("dirt")
-local hash_start_game = hash("start_game")
-local hash_reset = hash("reset")
 
 local position = vmath.vector3(constants.bird_position)
 local velocity = vmath.vector3()
 local acceleration = vmath.vector3(0,-460,0)
 local easing = vmath.vector({-1,1})
 
-local hash_touch = hash("touch")
 local rotation = 0
 local flapping = true
 local alive = true
@@ -24,13 +16,25 @@ local state = 0 -- 0 - idle, 1 - game
 
 local function idle_animation(self)
 	go.animate(".","position.y",go.PLAYBACK_LOOP_PINGPONG,constants.bird_position.y+1.75,easing,0.75)	
+end
+
+local function reset(self)
+	position = vmath.vector3(constants.bird_position)
+	rotation = 0
+	flapping = true
+	alive = true
+	state = 0 -- 0 - idle, 1 - game
+	acceleration.y = -460
+	msg.post("#sprite", "play_animation", {id = hashes.FLY})
+	go.set_position(position)
+	go.set(".","euler.z",-rotation)
+	idle_animation(self)
 end	
 
 function init(self)
-	msg.post(".", "acquire_input_focus")
-	msg.post("#sprite", "play_animation", {id = hash_fly})
-	go.set_position(position)
-	idle_animation(self)
+	msg.post(".", hashes.INPUT_FOCUS_GET)
+	msg.post("#sprite", "play_animation", {id = hashes.FLY})
+	reset(self)
 end
 
 local function  is_falling()
@@ -49,7 +53,7 @@ local function rotate(dt)
 end
 
 local function update_animation()
-	local name = flapping and hash_fly or hash_bird
+	local name = flapping and hashes.FLY or hashes.BIRD
 	msg.post("#sprite", "play_animation", {id = name})
 end	
 
@@ -67,47 +71,32 @@ function update(self, dt)
 end
 
 function on_input(self, action_id, action)
-	if(alive and action_id == hash_touch and action.pressed and
+	if(alive and action_id == hashes.INPUT_TOUCH and action.pressed and
 	position.y < screen_helper.max_height) then 
 		velocity.y = 140 
 		msg.post("/sounds#flap","play_sound")
 	end	
 end
 
-local function reset(self)
-	position = vmath.vector3(constants.bird_position)
-	rotation = 0
-	flapping = true
-	alive = true
-	state = 0 -- 0 - idle, 1 - game
-	acceleration.y = -460
-	msg.post("#sprite", "play_animation", {id = hash_fly})
-	go.set_position(position)
-	go.set(".","euler.z",-rotation)
-	idle_animation(self)
-end	
-
 
 function on_message(self,message_id,message,sender)
-	if(message_id == hash_collision_response and message.group ~= hash_score) then
+	if(message_id == hashes.PHYSICS_MESSAGE_COLLISION and message.group ~= hashes.SCORE) then
 		if(alive == true) then	
 			alive = false
 			msg.post("/sounds#dead","play_sound")
-			msg.post("/grass#script","stop")
-			msg.post("/pipe_factory#script","stop")
 			msg.post("controller","game_over")
 		end
-		if(message.group == hash_dirt) then
+		if(message.group == hashes.DIRT) then
 			acceleration.y = 0
 			velocity.y = 0
 		end	
-	elseif(message_id == hash_trigger_response and message.enter) then
+	elseif(message_id == hashes.PHYSICS_MESSAGE_TRIGGER and message.enter) then
 		msg.post("/sounds#coin","play_sound")
 		msg.post("controller","increase_score")
-	elseif(message_id == hash_start_game) then
+	elseif(message_id == hashes.MESSAGE_START_GAME) then
 		state = 1
 		go.cancel_animations(".","position.y")
-	elseif(message_id == hash_reset) then
+	elseif(message_id == hashes.MESSAGE_RESET) then
 		reset(self)
 	end
 end

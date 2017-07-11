@@ -1,19 +1,18 @@
-local hash_set_score = hash("set_score")
+local hashes = require("lib.hashes")
 local save_file = sys.get_save_file("com.d954mas.flappybird","data")
-local hash_touch = hash("touch")
-
 local score_container_start_pos;
 local game_over_end_pos;
 local easing_game_over = vmath.vector({0,1,0})
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	self.ignore_input = false
+	--find nodes
 	self.score_lbl=gui.get_node("score")
 	self.best_lbl=gui.get_node("best")
 	self.restart_node = gui.get_node("restart")
 	self.score_container = gui.get_node("score_container")
 	self.game_over = gui.get_node("game_over")
-	self.score_container_pos = gui.get_position(self.score_container)
+	--logic vars
+	self.ignore_input = false
 	self.score_container_pos = gui.get_position(self.score_container)
 	self.data = sys.load(save_file)
 	if(self.data.best==nil)then self.data.best=0 end
@@ -40,7 +39,7 @@ local function show_animation(self)
 end	
 
 function on_message(self, message_id, message, sender)
-	if(message_id == hash("show")) then
+	if(message_id == hashes.MESSAGE_SHOW) then
 		show_animation(self)
 		gui.set_text(self.score_lbl,message.score)
 		gui.set_text(self.best_lbl,self.data.best)
@@ -52,8 +51,8 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	if(not self.ignore_input and action_id == hash_touch  and action.pressed 
+	if(not self.ignore_input and action_id == hashes.INPUT_TOUCH  and action.pressed 
 		and gui.pick_node(self.restart_node,action.x,action.y)) then
-		msg.post("controller","restart")
+		msg.post("controller",hashes.MESSAGE_RESTART)
 	end
 end
