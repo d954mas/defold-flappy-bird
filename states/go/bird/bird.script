@@ -68,7 +68,7 @@ end
 
 function on_input(self, action_id, action)
 	if(alive and action_id == hash_touch and action.pressed and
-	position.y < screen_helper.game_height) then 
+	position.y < screen_helper.max_height) then 
 		velocity.y = 140 
 		msg.post("/sounds#flap","play_sound")
 	end	
