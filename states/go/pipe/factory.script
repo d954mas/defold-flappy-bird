@@ -1,22 +1,24 @@
 local constants = require("lib.constants")
 local hashes = require("lib.hashes")
 
+local TOP_PIPE_TOP = hash("/pipe_top/top")
+local TOP_PIPE_BOTTOM = hash("/pipe_top/bottom")
+local BOTTOM_PIPE_TOP = hash("/pipe_bottom/top")
+local BOTTOM_PIPE_BOTTOM = hash("/pipe_bottom/bottom")
+local PIPE_ROOT = hash("/root")
 
-local top_pipe_top = hash("/pipe_top/top")
-local top_pipe_bottom = hash("/pipe_top/bottom")
-local bottom_pipe_top = hash("/pipe_bottom/top")
-local bottom_pipe_bottom = hash("/pipe_bottom/bottom")
-local pipe_root = hash("/root")
-local bot_scale = vmath.vector3(1)
-local end_x = -constants.pipe_width/2
+local BOT_SCALE = vmath.vector3(1)
+ --animate moving while pipe not moved from screen
+local END_X = -constants.pipe_width/2
+
 go.property("pipes_size",3)
 
 local function change_height(pipe)
 	local height = math.random(15,90) - constants.pipe_top_height/2
-	go.set(pipe[bottom_pipe_top], "position.y",constants.pipe_start_pos.y + height)
-	bot_scale.y = (height)/constants.pipe_bot_height + 0.1 --add 0.1 because there are gap between grass and pipe
-	go.set_scale(bot_scale,pipe[bottom_pipe_bottom])
-	go.set(pipe[top_pipe_top], "position.y", constants.pipe_start_pos.y + height 
+	go.set(pipe[BOTTOM_PIPE_TOP], "position.y",constants.pipe_start_pos.y + height)
+	BOT_SCALE.y = (height)/constants.pipe_bot_height + 0.1 --add 0.1 because there are gap between grass and pipe
+	go.set_scale(BOT_SCALE,pipe[BOTTOM_PIPE_BOTTOM])
+	go.set(pipe[TOP_PIPE_TOP], "position.y", constants.pipe_start_pos.y + height 
 			+ constants.pipe_top_height*2 + constants.pipe_top_gap)
 end 
 
@@ -25,33 +27,31 @@ local function repeat_animation(self,id)
 	local prev_pipe_id = id - 1
 	if(prev_pipe_id == 0) then prev_pipe_id = self.pipes_size end
 	local prev_pipe = self.pipes[prev_pipe_id]
-	local pipe_x =  go.get(prev_pipe[pipe_root],"position.x") + constants.pipe_gap
-	go.set(pipe[pipe_root],"position.x",pipe_x)
-	local path = pipe_x - end_x
-	go.animate(pipe[pipe_root],"position.x",go.PLAYBACK_ONCE_FORWARD,end_x,go.EASING_LINEAR,path/constants.pipes_speed,0,function() repeat_animation(self,id) end)
+	local pipe_x =  go.get(prev_pipe[PIPE_ROOT],"position.x") + constants.pipe_gap
+	go.set(pipe[PIPE_ROOT],"position.x",pipe_x)
+	local path = pipe_x - END_X
+	go.animate(pipe[PIPE_ROOT],"position.x",go.PLAYBACK_ONCE_FORWARD,END_X,go.EASING_LINEAR,path/constants.pipes_speed,0,function() repeat_animation(self,id) end)
 end	
 
 local function start_animation(self,id)
 	local pipe = self.pipes[id]
-	local pipe_x = go.get(pipe[pipe_root],"position.x")
-	local path = pipe_x - end_x
-	go.animate(pipe[pipe_root],"position.x",go.PLAYBACK_ONCE_FORWARD,end_x,go.EASING_LINEAR,path/constants.pipes_speed,0,function() repeat_animation(self,id) end)
+	local pipe_x = go.get(pipe[PIPE_ROOT],"position.x")
+	local path = pipe_x - END_X
+	go.animate(pipe[PIPE_ROOT],"position.x",go.PLAYBACK_ONCE_FORWARD,END_X,go.EASING_LINEAR,path/constants.pipes_speed,0,function() repeat_animation(self,id) end)
 end
 
 local function init_pipe(pipe,id)
-	msg.post(pipe[top_pipe_top], "set_parent", {parent_id = pipe[pipe_root], keep_world_transform = 0})
-	msg.post(pipe[bottom_pipe_top], "set_parent", {parent_id = pipe[pipe_root], keep_world_transform = 0})
-	
-	go.set(pipe[pipe_root],"position.x",constants.pipe_start_pos.x + constants.pipe_gap * (id-1))
-	
-	bot_scale.y = 50
-	go.set_scale(bot_scale,pipe[top_pipe_bottom])
+	go.set(pipe[PIPE_ROOT],"position.x",constants.pipe_start_pos.x + constants.pipe_gap * (id-1))
+	BOT_SCALE.y = 50
+	go.set_scale(BOT_SCALE,pipe[TOP_PIPE_BOTTOM])
 	change_height(pipe)
 end
 
 local function create_pipes(self)
-	for i = 1,  self.pipes_size do
+	for i = 1, self.pipes_size do
 		local pipe = collectionfactory.create("#factory", nil, nil, {}, nil)
+		msg.post(pipe[TOP_PIPE_TOP], "set_parent", {parent_id = pipe[PIPE_ROOT], keep_world_transform = 0})
+		msg.post(pipe[BOTTOM_PIPE_TOP], "set_parent", {parent_id = pipe[PIPE_ROOT], keep_world_transform = 0})
 		self.pipes[i] = pipe
 	end
 end
@@ -68,23 +68,23 @@ local function pipes_animation(self)
 	end	
 end	
 
+local function send_msg_to_pipe(pipe,message)
+	msg.post(pipe[PIPE_ROOT],message)
+	msg.post(pipe[TOP_PIPE_TOP],message)
+	msg.post(pipe[TOP_PIPE_BOTTOM],message)
+	msg.post(pipe[BOTTOM_PIPE_TOP],message)	
+	msg.post(pipe[BOTTOM_PIPE_BOTTOM],message)
+end	
+
 local function disable_pipes(self)
 	for i,pipe in ipairs(self.pipes) do
-		msg.post(pipe[pipe_root],hashes.MESSAGE_DISABLE)
-		msg.post(pipe[top_pipe_top],hashes.MESSAGE_DISABLE)
-		msg.post(pipe[top_pipe_bottom],hashes.MESSAGE_DISABLE)
-		msg.post(pipe[bottom_pipe_top],hashes.MESSAGE_DISABLE)	
-		msg.post(pipe[bottom_pipe_bottom],hashes.MESSAGE_DISABLE)
+		send_msg_to_pipe(pipe,hashes.MESSAGE_DISABLE)
 	end
 end	
 
 local function enable_pipes(self)
 	for i,pipe in ipairs(self.pipes) do
-		msg.post(pipe[pipe_root],hashes.MESSAGE_ENABLE)
-		msg.post(pipe[top_pipe_top],hashes.MESSAGE_ENABLE)
-		msg.post(pipe[top_pipe_bottom],hashes.MESSAGE_ENABLE)
-		msg.post(pipe[bottom_pipe_top],hashes.MESSAGE_ENABLE)	
-		msg.post(pipe[bottom_pipe_bottom],hashes.MESSAGE_ENABLE)
+		send_msg_to_pipe(pipe,hashes.MESSAGE_ENABLE)
 	end
 end
 
@@ -98,7 +98,7 @@ end
 function on_message(self,message_id,message)
 	if(message_id == hashes.MESSAGE_STOP) then
 		for i,pipe in ipairs(self.pipes) do
-			go.cancel_animations(pipe[pipe_root],"position.x")
+			go.cancel_animations(pipe[PIPE_ROOT],"position.x")
 		end	
 	elseif(message_id == hashes.MESSAGE_START) then
 		init_pipes(self)
