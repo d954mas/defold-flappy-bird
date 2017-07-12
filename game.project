@@ -28,6 +28,7 @@ include_dirs = https://github.com/d954mas/stageUI/archive/master.zip,  https://g
 [graphics]
 default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
+texture_profiles = /my.texture_profiles
 
 [android]
 app_icon_48x48 = /assets/android/mipmap-mdpi/ic_launcher.png

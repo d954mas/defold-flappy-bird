@@ -3,99 +3,99 @@ local screen_helper = require ("lib.screen_helper")
 local lume = require ("lib.lume")
 local hashes = require("lib.hashes")
 
-
-local position = vmath.vector3(constants.bird_position)
-local velocity = vmath.vector3()
-local acceleration = vmath.vector3(0,-460,0)
-local easing = vmath.vector({-1,1})
-
-local rotation = 0
-local flapping = true
-local alive = true
-local state = 0 -- 0 - idle, 1 - game
+local STATES = {idle=0,game_alive=1,game_dead=2}
+local IDLE_EASING = vmath.vector({-1,1})
+local ACCELERATION = vmath.vector3(0,-460,0)
+local ROTATION_EASING = vmath.vector({0,})
 
 local function idle_animation(self)
-	go.animate(".","position.y",go.PLAYBACK_LOOP_PINGPONG,constants.bird_position.y+1.75,easing,0.75)	
+	go.animate(".","position.y",go.PLAYBACK_LOOP_PINGPONG,constants.bird_position.y+1.75,IDLE_EASING,0.75)	
 end
 
 local function reset(self)
-	position = vmath.vector3(constants.bird_position)
-	rotation = 0
-	flapping = true
-	alive = true
-	state = 0 -- 0 - idle, 1 - game
-	acceleration.y = -460
-	msg.post("#sprite", "play_animation", {id = hashes.FLY})
-	go.set_position(position)
-	go.set(".","euler.z",-rotation)
+	self.state = STATES.idle
+	self.position = vmath.vector3(constants.bird_position)
+	self.rotation = 0
+	self.acceleration=vmath.vector3(ACCELERATION)
+	self.velocity=vmath.vector3()
+	go.set_position(self.position)
+	go.set(".","euler.z",self.rotation)
+	msg.post("#sprite", hashes.MESSAGE_PLAY_ANIMATION, {id = hashes.FLY})
 	idle_animation(self)
 end	
 
 function init(self)
 	msg.post(".", hashes.INPUT_FOCUS_GET)
-	msg.post("#sprite", "play_animation", {id = hashes.FLY})
 	reset(self)
 end
 
-local function  is_falling()
-    return velocity.y < -110;
+local function is_falling(self)
+    return self.velocity.y < -110
 end
 
-local function should_flap()
-    return velocity.y > -70 and alive
+local function should_flap(self)
+    return self.velocity.y > -70 and self.state~=STATES.game_dead
 end
 
-local function rotate(dt)
-    if (velocity.y > 0) then rotation = rotation - 600 * dt
-	elseif (is_falling() or not alive)then rotation = rotation +  480 * dt end
-	rotation = lume.clamp(rotation,-20,90)
-    go.set(".","euler.z",-rotation)
+local function rotate(self,dt)	
+    if (self.velocity.y > 0) then self.rotation = self.rotation + 600 * dt
+	elseif (is_falling(self) or self.state==STATES.game_dead)then 
+		self.rotation = self.rotation -  480 * dt 
+	end
+	self.rotation = lume.clamp(self.rotation,-90,20)
+    go.set(".","euler.z",self.rotation)
 end
 
 local function update_animation()
 	local name = flapping and hashes.FLY or hashes.BIRD
-	msg.post("#sprite", "play_animation", {id = name})
+	msg.post("#sprite", hashes.MESSAGE_PLAY_ANIMATION, {id = name})
 end	
 
 function update(self, dt)
-	if(state == 0) then return end
-	velocity = velocity + acceleration * dt
-    if (velocity.y < -200) then velocity.y = -200 end
-    position = position + velocity * dt 
-    go.set_position(position)
-    rotate(dt)
-    if(flapping ~= should_flap())then
-    	flapping = should_flap()
+	if(self.state == STATES.idle) then return end
+	self.velocity = self.velocity + self.acceleration * dt
+    if (self.velocity.y < -200) then self.velocity.y = -200 end
+    self.position = self.position + self.velocity * dt 
+    go.set_position(self.position)
+    rotate(self,dt)
+    local is_should_flap=should_flap(self)
+    if(flapping ~= is_should_flap)then
+    	flapping = is_should_flap
     	update_animation()
     end
 end
 
+local function click(self)
+	self.velocity.y = 140 
+	msg.post("/sounds#flap",hashes.MESSAGE_PLAY_SOUND)
+end
+
 function on_input(self, action_id, action)
-	if(alive and action_id == hashes.INPUT_TOUCH and action.pressed and
-	position.y < screen_helper.max_height) then 
-		velocity.y = 140 
-		msg.post("/sounds#flap","play_sound")
+	if(self.state==STATES.game_alive and action_id == hashes.INPUT_TOUCH and action.pressed and
+	self.position.y < screen_helper.max_height) then 
+		click(self)
 	end	
 end
 
 
 function on_message(self,message_id,message,sender)
 	if(message_id == hashes.PHYSICS_MESSAGE_COLLISION and message.group ~= hashes.SCORE) then
-		if(alive == true) then	
-			alive = false
-			msg.post("/sounds#dead","play_sound")
-			msg.post("controller","game_over")
+		if(self.state==STATES.game_alive) then	
+			self.state=STATES.game_dead
+			msg.post("/sounds#dead",hashes.MESSAGE_PLAY_SOUND)
+			msg.post("controller",hashes.MESSAGE_GAME_OVER)
 		end
 		if(message.group == hashes.DIRT) then
-			acceleration.y = 0
-			velocity.y = 0
+			self.acceleration.y = 0
+			self.velocity.y = 0
 		end	
 	elseif(message_id == hashes.PHYSICS_MESSAGE_TRIGGER and message.enter) then
-		msg.post("/sounds#coin","play_sound")
-		msg.post("controller","increase_score")
+		msg.post("/sounds#coin",hashes.MESSAGE_PLAY_SOUND)
+		msg.post("controller",hashes.MESSAGE_INCREASE_SCORE)
 	elseif(message_id == hashes.MESSAGE_START_GAME) then
-		state = 1
+		self.state=STATES.game_alive
 		go.cancel_animations(".","position.y")
+		click(self)
 	elseif(message_id == hashes.MESSAGE_RESET) then
 		reset(self)
 	end

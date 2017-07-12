@@ -4,13 +4,11 @@ changing state is happened here
 --]]
 
 local hashes = require("lib.hashes")
-local state_ready=0
-local state_game=1
-local state_game_over=2
+local STATES = {ready=0,game=1,game_over=2}
 
 local function reset(self)
 	self.score = 0
-	self.state = state_ready
+	self.state = STATES.ready
 	msg.post("bird",hashes.MESSAGE_RESET)
 	msg.post("pipe_factory",hashes.MESSAGE_RESET)
 	msg.post("grass",hashes.MESSAGE_START)
@@ -26,7 +24,7 @@ function init(self)
 end
 
 local function start_game(self,state)
-	self.state = state_game
+	self.state = STATES.game
 	msg.post("idle_gui",hashes.MESSAGE_DISABLE)
 	msg.post("pipe_factory",hashes.MESSAGE_START)
 	msg.post("bird",hashes.MESSAGE_START_GAME)
@@ -41,7 +39,7 @@ end
 function on_message(self, message_id, message, sender)
 	if(message_id == hashes.MESSAGE_INCREASE_SCORE) then increase_score(self)
 	elseif(message_id == hashes.MESSAGE_GAME_OVER) then
-		self.state = state_game_over
+		self.state = STATES.game_over
 		msg.post("game_gui",hashes.MESSAGE_DISABLE)
 		msg.post("game_over_gui",hashes.MESSAGE_ENABLE)
 		msg.post("game_over_gui",hashes.MESSAGE_SHOW,{score = self.score})
@@ -53,7 +51,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	if(self.state == state_ready and action_id == hashes.INPUT_TOUCH and action.pressed) then
+	if(self.state == STATES.ready and action_id == hashes.INPUT_TOUCH and action.pressed) then
 		start_game(self)
 	end	
 end

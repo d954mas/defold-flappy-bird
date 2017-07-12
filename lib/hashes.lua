@@ -9,6 +9,8 @@ M.PHYSICS_MESSAGE_COLLISION = hash("collision_response")
 M.PHYSICS_MESSAGE_TRIGGER = hash("trigger_response")
 
 M.MESSAGE_ENABLE=hash("enable")
+M.MESSAGE_PLAY_ANIMATION=hash("play_animation")
+M.MESSAGE_PLAY_SOUND=hash("play_sound")
 M.MESSAGE_DISABLE=hash("disable")
 M.MESSAGE_RESET=hash("reset")
 M.MESSAGE_INCREASE_SCORE=hash("increase_score")
