@@ -1,6 +1,6 @@
 [project]
 title = Flappy Zombie
-version = 0.2
+version = 1.01
 dependencies = 
 
 [bootstrap]
